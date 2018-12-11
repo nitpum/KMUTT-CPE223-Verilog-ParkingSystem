@@ -30,6 +30,7 @@ module top_module(
     wire clk_sec;
     reg [6:0] seg1, seg2, seg3, seg4;
     wire [6:0] min_decimal, min_unit, sec_deciaml, sec_unit;
+    wire [10:0] parking_time1;
     wire [10:0] timer;
     wire [6:0] seg_temp;
     reg [3:0] seg_dot;
@@ -66,7 +67,10 @@ module top_module(
                     seg4 = prev;
                     seg_dot = 4'b1111; 
                 end
+                3: begin
+                    
+                end
             endcase
     end
-    display(clk, dot, seg1, seg2, seg3, seg4, seg, an, dp);
+    display(clk, seg_dot, seg1, seg2, seg3, seg4, seg, an, dp);
 endmodule
