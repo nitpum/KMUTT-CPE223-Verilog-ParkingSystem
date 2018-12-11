@@ -56,6 +56,7 @@ module top_module(
     bcdto7seg(selector, selector7seg);
     btn_decoder(clk, JCC, JCR, selector, btn_press);
     
+    /* Time */
     savetime(time_saver[0], timer, parking_time1);
     savetime(time_saver[1], timer, parking_time2);
     savetime(time_saver[2], timer, parking_time3);
@@ -65,27 +66,10 @@ module top_module(
     
     price_calculator(checkout, checkout_time, timer, 5, checkout_price);
     
-//    countdown(clk_sec, start_ct, 5, delay_state);
-    
     selectstate(clkms, btn_press, state);
     
     carstatus(clk, JB, JA);
-//    always @ (selector) begin
-//        case (selector)
-//            default: begin
-//                state <= 0; 
-//                end
-//            1: 
-//                begin
-//                    if (state == 0)
-//                        begin
-//                            state <= 1;
-//                            start_ct <= 1;
-//                            start_ct <= 1;              
-//                        end
-//                end 
-//        endcase
-//    end
+
     always @ (state) begin
             case (state)
                 default: begin
