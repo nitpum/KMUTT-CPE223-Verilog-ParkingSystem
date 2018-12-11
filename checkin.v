@@ -21,7 +21,8 @@
 
 
 module checkin(
-    input avail,
+    input free,
+    input press,
     input [3:0] selector,
     input [10:0] timer,
     input [5:0] time_saver,
@@ -35,8 +36,8 @@ module checkin(
         p5 = 0;
         p6 = 0;
     end
-    always @ (selector) begin
-        if (avail) 
+    always @ (posedge press) begin
+        if (free) 
             begin
                 case (selector)
                     1: p1 <= timer;

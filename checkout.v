@@ -28,7 +28,7 @@ module checkout(
     output [10:0] fee
     );
     reg use_time;
-    always @ (selector) begin
+    always @ (have) begin
         if (have) 
             begin
                case (selector)
