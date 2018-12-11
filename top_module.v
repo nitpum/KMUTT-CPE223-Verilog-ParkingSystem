@@ -67,9 +67,10 @@ module top_module(
     checkin(btn_press);
     price_calculator(checkout, checkout_time, timer, 5, checkout_price);
     
-    selectstate(clkms, btn_press, state);
+    selectstate(clkms, slotavail, btn_press, state);
+    wire slotavail;
+    checkslot(parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, selector, slotavail);
     carstatus(clk, JB, JA);
-
     always @ (state) begin
             case (state)
                 default: begin
