@@ -29,7 +29,7 @@ module top_module(
     );
     wire clk_sec;
     reg [6:0] seg1, seg2, seg3, seg4;
-    wire [6:0] min_decimal, min_unit, sec_deciaml, sec_unit;
+    wire [6:0] min_decimal, min_unit, sec_decimal, sec_unit;
     wire [10:0] parking_time1;
     wire [10:0] timer;
     wire [6:0] seg_temp;
@@ -38,11 +38,8 @@ module top_module(
     reg [6:0] prev;
     divide_sec(clk, clk_sec);
     time_counter(clk_sec, 0, timer);
-    bcdto7seg(timer / 60 / 10, min_decial);
-    bcdto7seg(timer / 60 % 10, min_unit);
-    bcdto7seg(timer % 60 / 10, sec_decimal);
-    bcdto7seg(timer % 10, sec_unit);
-    decoder(JCC,clk,num,JCR);
+    timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
+//    decoder(JCC,clk,num,JCR);
     bcdto7seg(num[3:0],seg_temp);
     always @ (sw) begin
             case (sw)
