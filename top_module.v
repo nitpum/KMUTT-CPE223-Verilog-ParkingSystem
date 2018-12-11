@@ -31,7 +31,7 @@ module top_module(
     output [4:0] JA,
     output dp
     );
-    wire clk_sec, checkout;
+    wire clk_sec;
     reg start_ct;
     wire [2:0] state;
     reg [6:0] seg1, seg2, seg3, seg4;
@@ -44,11 +44,17 @@ module top_module(
     wire [3:0] selector;
     wire [6:0] selector7seg;
     wire [17:0] checkout_price;
+    wire [10:0] fee;
     wire [6:0] price1_seg, price2_seg, price3_seg;
-    divide_sec(clk, clk_sec);
     wire clkms;
+    wire slotavail;
+    divide_sec(clk, clk_sec);
     divider(clk, clkms);
     time_counter(clk_sec, 0, timer);
+
+    bcdto7seg(fee / 100 % 10, price1_seg);
+    bcdto7seg(fee / 10 % 10, price2_seg);
+    bcdto7seg(fee % 10, price3_seg);
 
     //timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
     timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
@@ -57,19 +63,12 @@ module top_module(
     bcdto7seg(selector, selector7seg);
     btn_decoder(clk, JCC, JCR, selector, btn_press);
     
-    /* Time */
-    savetime(time_saver[0], timer, parking_time1);
-    savetime(time_saver[1], timer, parking_time2);
-    savetime(time_saver[2], timer, parking_time3);
-    savetime(time_saver[3], timer, parking_time4);
-    savetime(time_saver[4], timer, parking_time5);
-    savetime(time_saver[5], timer, parking_time6);
-    checkin(btn_press);
-    price_calculator(checkout, checkout_time, timer, 5, checkout_price);
+//    price_calculator(checkout, checkout_time, timer, 5, checkout_price);
     
     selectstate(clkms, slotavail, btn_press, state);
-    wire slotavail;
     checkslot(parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, selector, slotavail);
+    checkin(~slotavail, selector, timer, time_saver, parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6);
+    checkout(slotavail, selector);
     carstatus(clk, JB, JA);
     always @ (state) begin
             case (state)
