@@ -31,6 +31,8 @@ module top_module(
     reg [6:0] seg1, seg2, seg3, seg4;
     wire [6:0] min_decimal, min_unit, sec_decimal, sec_unit;
     wire [10:0] parking_time1;
+    wire [6:0] min1, min2, sec1, sec2;
+    reg save_time;
     wire [10:0] timer;
     wire [6:0] seg_temp;
     reg [3:0] seg_dot;
@@ -39,9 +41,12 @@ module top_module(
     divide_sec(clk, clk_sec);
     time_counter(clk_sec, 0, timer);
     timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
+    timeto7seg(parking_time1, min1, min2, sec1, sec2);
+    savetime(save_time, timer, parking_time1);
 //    decoder(JCC,clk,num,JCR);
     bcdto7seg(num[3:0],seg_temp);
     always @ (sw) begin
+        if (sw != 3) save_time <= 0;
             case (sw)
                 default: begin
                     seg1 = min_decimal;
@@ -65,7 +70,19 @@ module top_module(
                     seg_dot = 4'b1111; 
                 end
                 3: begin
-                    
+                    seg1 = 7'b111111;
+                    seg2 = min2;
+                    seg3 = sec1;
+                    seg4 = sec2;
+                    save_time <= 1;
+                    seg_dot = 4'b1111;
+                end
+                4: begin
+                    seg1 = min1;
+                    seg2 = min2;
+                    seg3 = sec1;
+                    seg4 = sec2;
+                    seg_dot = 4'b1011;
                 end
             endcase
     end

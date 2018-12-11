@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 12/10/2018 01:33:26 AM
+// Create Date: 12/11/2018 06:52:08 PM
 // Design Name: 
-// Module Name: savetime
+// Module Name: time_divider
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,14 +20,12 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module savetime(
-        input enable,
-        input [10:0] timer,
-        output reg [10:0] out
+module time_divider(
+    input [10:0] timer,
+    output [6:0] min_decimal, min_unit, sec_deciaml, sec_unit
     );
-    always @ (enable) begin
-        if (enable == 1) begin
-            out <= timer;
-        end
-    end
+    assign min_decimal = timer / 60 / 10;
+    assign min_unit = timer / 60 % 10;
+    assign sec_decimal = timer % 60 / 10;
+    assign sec_unit = timer % 10;
 endmodule
