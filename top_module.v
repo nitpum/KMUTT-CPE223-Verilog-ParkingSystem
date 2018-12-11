@@ -29,16 +29,16 @@ module top_module(
     output [3:0] JCR,
     output dp
     );
-    wire clk_sec;
+    wire clk_sec, checkout;
     reg [6:0] seg1, seg2, seg3, seg4;
     wire [6:0] min_decimal, min_unit, sec_decimal, sec_unit;
-    wire [10:0] show_time, parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6;
-    wire [6:0] min1, min2, sec1, sec2;
+    wire [10:0] checkout_time, parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6;
     reg [5:0] time_saver;
     wire [10:0] timer;
     reg [3:0] seg_dot;
     wire [3:0] selector;
     wire [6:0] selector7seg;
+    wire [17:0] checkout_price;
     divide_sec(clk, clk_sec);
     time_counter(clk_sec, 0, timer);
 
@@ -54,8 +54,10 @@ module top_module(
     savetime(time_saver[4], timer, parking_time5);
     savetime(time_saver[5], timer, parking_time6);
     
+    price_calculator(checkout, checkout_time, timer, 5, checkout_price);
+    
     /* Temp save timing */
-    always @ (posedge selector) begin
+    always @ (selector) begin
         case (selector)
             default: time_saver = 6'b000000;
             1: time_saver = 6'b000001;
@@ -66,6 +68,8 @@ module top_module(
             6: time_saver = 6'b100000;
         endcase
     end
+    
+    
     always @ (sw) begin
         case (sw)
             default: begin
