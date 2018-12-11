@@ -27,6 +27,14 @@ module checkin(
     input [5:0] time_saver,
     output reg [10:0] p1, p2, p3, p4, p5, p6 /* Parking check in time */
     );
+    initial begin
+        p1 = 0;
+        p2 = 0;
+        p3 = 0;
+        p4 = 0;
+        p5 = 0;
+        p6 = 0;
+    end
     always @ (selector) begin
         if (avail) 
             begin
