@@ -44,6 +44,7 @@ module top_module(
     wire [3:0] selector;
     wire [6:0] selector7seg;
     wire [17:0] checkout_price;
+    wire [6:0] price1_seg, price2_seg, price3_seg;
     divide_sec(clk, clk_sec);
     wire clkms;
     divider(clk, clkms);
@@ -63,11 +64,10 @@ module top_module(
     savetime(time_saver[3], timer, parking_time4);
     savetime(time_saver[4], timer, parking_time5);
     savetime(time_saver[5], timer, parking_time6);
-    
+    checkin(btn_press);
     price_calculator(checkout, checkout_time, timer, 5, checkout_price);
     
     selectstate(clkms, btn_press, state);
-    
     carstatus(clk, JB, JA);
 
     always @ (state) begin
@@ -92,6 +92,13 @@ module top_module(
                     seg3 = 7'b0000111;
                     seg4 = selector7seg; /* print tactile */
                     seg_dot = 4'b1111; 
+                end
+                3: begin
+                    seg1 = price1_seg;
+                    seg2 = price2_seg;
+                    seg3 = price3_seg;
+                    seg4 = 7'b0111111;
+                    seg_dot = 4'b1101;
                 end
             endcase
     end
