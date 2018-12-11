@@ -58,7 +58,8 @@ module top_module(
     bcdto7seg(fee % 10, price3_seg);
 
     timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
-    assign led = { parking_time6 > 0, parking_time5 > 0, parking_time4 > 0, parking_time3 > 0, parking_time2 > 0, parking_time1 > 0 };
+//    assign led = { parking_time6 > 0, parking_time5 > 0, parking_time4 > 0, parking_time3 > 0, parking_time2 > 0, parking_time1 > 0 };
+    assign led = fee;
     wire btn_press;
     bcdto7seg(selector, selector7seg);
     btn_decoder(clk, JCC, JCR, state==0, selector, btn_press);
@@ -66,7 +67,7 @@ module top_module(
     selectstate(clkms, slotavail, btn_press, state, activateSaveSlot);
     checkslot(parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, 
                 selector, slotavail);
-    checkinout(~slotavail, activateSaveSlot, selector, timer, 
+    checkinout(~slotavail, btn_press, activateSaveSlot, selector, timer, 
                 parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, 
                 fee);
     carstatus(clk, JB, JA);
