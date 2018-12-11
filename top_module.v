@@ -65,10 +65,11 @@ module top_module(
     btn_decoder(clk, JCC, JCR, selector, btn_press);
     assign led = {parking_time1 > 0, parking_time2 > 0, parking_time3 > 0, parking_time4 > 0, parking_time5 > 0, parking_time6 > 0};
 //    price_calculator(checkout, checkout_time, timer, 5, checkout_price);
-    selectstate(clkms, slotavail, btn_press, state);
+    wire activateSaveSlot;
+    selectstate(clkms, slotavail, btn_press, state, activateSaveSlot);
     checkslot(parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, selector, slotavail);
-    checkin(~slotavail, btn_press, selector, timer, time_saver, parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6);
-    //checkout(slotavail, selector);
+    checkin(~slotavail, activateSaveSlot, selector, timer, time_saver, parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, fee);
+//    checkout(slotavail, activateSaveSlot, selector, timer, parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, fee);
     carstatus(clk, JB, JA);
     always @ (state) begin
             case (state)

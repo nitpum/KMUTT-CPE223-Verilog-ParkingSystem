@@ -22,39 +22,40 @@
 
 module checkout(
     input have,
+    input enable,
     input [3:0] selector,
     input [10:0] timer,
     output reg [10:0] p1, p2, p3, p4, p5, p6,
     output [10:0] fee
     );
     reg use_time;
-    always @ (have) begin
+    always @ (posedge enable) begin
         if (have) 
             begin
                case (selector)
                     1: begin
-                        use_time <= timer - p1;              
-                        p1 <= 0;
+                        use_time = timer - p1;              
+                        p1 = 0;
                     end
                     2: begin
-                        use_time <= timer - p2;              
-                        p2 <= 0;
+                        use_time = timer - p2;              
+                        p2 = 0;
                     end
                     3: begin
-                        use_time <= timer - p3;              
-                        p3 <= 0;
+                        use_time = timer - p3;              
+                        p3 = 0;
                     end
                     4: begin
-                        use_time <= timer - p4;              
-                        p4 <= 0;
+                        use_time = timer - p4;              
+                        p4 = 0;
                     end
                     5: begin
-                        use_time <= timer - p5;              
-                        p5 <= 0;
+                        use_time = timer - p5;              
+                        p5 = 0;
                     end
                     6: begin
-                        use_time <= timer - p6;              
-                        p6 <= 0;
+                        use_time = timer - p6;              
+                        p6 = 0;
                     end
                endcase 
             end

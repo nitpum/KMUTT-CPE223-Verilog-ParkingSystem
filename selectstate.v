@@ -2,7 +2,8 @@ module selectstate(
     input ms,
     input isOut,
     input press, 
-    output reg [2:0] state
+    output reg [2:0] state,
+    output activateSave
 );
     reg [10:0] counter;
     initial counter = 0;
@@ -16,4 +17,6 @@ module selectstate(
         else if(state == 2) state = 3;
         else state = 0;
     end
+    
+    assign activateSave = counter == 1;
 endmodule
