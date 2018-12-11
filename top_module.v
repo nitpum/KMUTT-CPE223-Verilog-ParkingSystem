@@ -56,6 +56,7 @@ module top_module(
     bcdto7seg(selector, selector7seg);
     btn_decoder(clk, JCC, JCR, selector, btn_press);
     
+    /* Time */
     savetime(time_saver[0], timer, parking_time1);
     savetime(time_saver[1], timer, parking_time2);
     savetime(time_saver[2], timer, parking_time3);

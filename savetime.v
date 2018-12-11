@@ -22,12 +22,15 @@
 
 module savetime(
         input enable,
+        input reset,
         input [10:0] timer,
         output reg [10:0] out
     );
-    always @ (enable) begin
-        if (enable == 1) begin
-            out <= timer;
-        end
+    always @ (enable or negedge reset) begin
+        if (reset) out <= 0;
+        else
+            if (enable == 1) begin
+                out <= timer;
+            end
     end
 endmodule
