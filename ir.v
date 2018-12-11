@@ -21,8 +21,8 @@
 
 
 module ir(
-    input IR,
     input clk,
+    input IR,
     output reg [1:0] led
 );
     wire clkms;

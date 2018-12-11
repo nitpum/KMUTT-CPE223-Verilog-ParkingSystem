@@ -27,6 +27,8 @@ module top_module(
     output [3:0] an,
     input [3:0] JCC,
     output [3:0] JCR,
+    input [4:0] JB,
+    output [4:0] JA,
     output dp
     );
     wire clk_sec;
@@ -46,38 +48,41 @@ module top_module(
     bcdto7seg(selector, selector7seg);
     btn_decoder(clk, JCC, JCR, selector);
     savetime(save_time, timer, parking_time1);
+    
+    carstatus(clk, JB, JA);
+    
     always @ (sw) begin
         if (sw != 3) save_time <= 0;
             case (sw)
-                    seg2 = min_unit;
-                    seg1 = min_decimal;
                 default: begin
+                    seg1 = min_decimal;
+                    seg2 = min_unit;
                     seg3 = sec_decimal;
                     seg4 = sec_unit;
                     seg_dot = 4'b1011;    
                 end
-            1: begin
-                seg1 = 7'b1111001;
-                seg2 = 7'b0101011;
-                seg3 = 7'b1111111;
-                seg4 = selector7seg; /* print tactile */
-                seg_dot = 4'b1111;    
-            end
-            2: begin
-                seg1 = 7'b1000000;
-                seg2 = 7'b1100011;
-                seg3 = 7'b0000111;
-                seg4 = selector7seg; /* print tactile */
-                seg_dot = 4'b1111; 
-            end
+                1: begin
+                    seg1 = 7'b1111001;
+                    seg2 = 7'b0101011;
+                    seg3 = 7'b1111111;
+                    seg4 = selector7seg; /* print tactile */
+                    seg_dot = 4'b1111;    
+                end
+                2: begin
+                    seg1 = 7'b1000000;
+                    seg2 = 7'b1100011;
+                    seg3 = 7'b0000111;
+                    seg4 = selector7seg; /* print tactile */
+                    seg_dot = 4'b1111; 
+                end
                 3: begin
                     seg1 = 7'b111111;
                     seg2 = min2;
                     seg3 = sec1;
                     seg4 = sec2;
                     save_time <= 1;
-                end
                     seg_dot = 4'b1111;
+                end
                 4: begin
                     seg1 = min1;
                     seg2 = min2;
