@@ -21,10 +21,23 @@
 
 
 module checkin(
+    input avail,
     input [3:0] selector,
     input [10:0] timer,
-    output reg [10:0] p1, p2, p3, p4 /* Parking check in time */
+    input [5:0] time_saver,
+    output reg [10:0] p1, p2, p3, p4, p5, p6 /* Parking check in time */
     );
-   
-    
+    always @ (selector) begin
+        if (avail) 
+            begin
+                case (selector)
+                    1: p1 <= timer;
+                    2: p2 <= timer;
+                    3: p3 <= timer;
+                    4: p4 <= timer;
+                    5: p5 <= timer;
+                    6: p6 <= timer;
+                endcase
+            end
+    end 
 endmodule
