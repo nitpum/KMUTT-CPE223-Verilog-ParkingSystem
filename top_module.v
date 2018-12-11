@@ -30,11 +30,14 @@ module top_module(
     output dp
     );
     wire clk_sec, checkout;
+    reg start_ct;
+    reg [2:0] state;
     reg [6:0] seg1, seg2, seg3, seg4;
     wire [6:0] min_decimal, min_unit, sec_decimal, sec_unit;
-    wire [10:0] checkout_time, parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6;
-    reg [5:0] time_saver;
-    wire [10:0] timer;
+    reg [10:0] checkout_time;
+    wire [10:0] parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6;
+    reg [5:0] time_saver, slot;
+    wire [10:0] timer, delay_state;
     reg [3:0] seg_dot;
     wire [3:0] selector;
     wire [6:0] selector7seg;
@@ -42,8 +45,8 @@ module top_module(
     divide_sec(clk, clk_sec);
     time_counter(clk_sec, 0, timer);
 
+    //timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
     timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
-    timeto7seg(show_time, min1, min2, sec1, sec2); /* time to show when in and out */
     bcdto7seg(selector, selector7seg);
     btn_decoder(clk, JCC, JCR, selector);
     
@@ -56,11 +59,35 @@ module top_module(
     
     price_calculator(checkout, checkout_time, timer, 5, checkout_price);
     
-    /* Temp save timing */
-    always @ (selector) begin
-        case (selector)
-            default: time_saver = 6'b000000;
-            1: time_saver = 6'b000001;
+    countdown(clk_sec, start_ct, 10, delay_state);
+    
+    always @ (posedge delay_state) 
+        begin
+            if (delay_state == 0) begin
+                start_ct <= 0;
+                state <= 0;
+            end
+        end
+    
+    always @ (state) begin
+        case (state)
+            default: begin 
+                    time_saver = 6'b000000;
+                end
+            1: begin
+//                    if (slot[0] == 0) 
+//                        begin
+//                            state <= 1;
+//                            time_saver = 6'b000001;
+//                            start_ct <= 1;
+//                        end
+//                    else
+//                        begin
+//                            state <= 2;
+//                            checkout_time <= parking_time1;
+//                            start_ct <= 1;
+//                        end
+                end
             2: time_saver = 6'b000010;
             3: time_saver = 6'b000100;
             4: time_saver = 6'b001000;
@@ -68,7 +95,6 @@ module top_module(
             6: time_saver = 6'b100000;
         endcase
     end
-    
     
     always @ (sw) begin
         case (sw)
