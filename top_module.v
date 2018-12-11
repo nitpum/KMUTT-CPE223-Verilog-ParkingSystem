@@ -31,8 +31,10 @@ module top_module(
     );
     wire clk_sec;
     reg [6:0] seg1, seg2, seg3, seg4;
-    wire [6:0] timer1, timer2, timer3, timer4;
+    wire [6:0] min_decimal, min_unit, sec_decimal, sec_unit;
+    wire [10:0] parking_time1;
     wire [10:0] timer;
+<<<<<<< HEAD
     reg [3:0] seg_dot;
     divide_sec(clk, clk_sec);
     time_counter(clk_sec, 0, timer);
@@ -70,6 +72,44 @@ module top_module(
                 seg_dot = 4'b1111; 
             end
         endcase
+=======
+    wire [6:0] seg_temp;
+    reg [3:0] seg_dot;
+    wire [15:0] num;
+    reg [6:0] prev;
+    divide_sec(clk, clk_sec);
+    time_counter(clk_sec, 0, timer);
+    timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
+//    decoder(JCC,clk,num,JCR);
+    bcdto7seg(num[3:0],seg_temp);
+    always @ (sw) begin
+            case (sw)
+                default: begin
+                    seg1 = min_decimal;
+                    seg2 = min_unit;
+                    seg3 = sec_decimal;
+                    seg4 = sec_unit;
+                    seg_dot = 4'b1011;    
+                end
+                1: begin
+                    seg1 = 7'b1111001;
+                    seg2 = 7'b0101011;
+                    seg3 = 7'b1111111;
+                    seg4 = prev;
+                    seg_dot = 4'b1111;    
+                end
+                2: begin
+                    seg1 = 7'b1000000;
+                    seg2 = 7'b1100011;
+                    seg3 = 7'b0000111;
+                    seg4 = prev;
+                    seg_dot = 4'b1111; 
+                end
+                3: begin
+                    
+                end
+            endcase
+>>>>>>> 3334c3f1de048eb6d1ba3111525fae3fea991dc7
     end
     display(clk, seg_dot, seg1, seg2, seg3, seg4, seg, an, dp);
 endmodule
