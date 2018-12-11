@@ -41,6 +41,7 @@ module top_module(
     wire [6:0] selector7seg;
     divide_sec(clk, clk_sec);
     time_counter(clk_sec, 0, timer);
+
     timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
     timeto7seg(show_time, min1, min2, sec1, sec2); /* time to show when in and out */
     bcdto7seg(selector, selector7seg);
@@ -65,29 +66,29 @@ module top_module(
         endcase
     end
     always @ (sw) begin
-            case (sw)
-                default: begin
-                    seg1 = min_decimal;
-                    seg2 = min_unit;
-                    seg3 = sec_decimal;
-                    seg4 = sec_unit;
-                    seg_dot = 4'b1011;    
-                end
-                1: begin
-                    seg1 = 7'b1111001;
-                    seg2 = 7'b0101011;
-                    seg3 = 7'b1111111;
-                    seg4 = selector7seg; /* print tactile */
-                    seg_dot = 4'b1111;    
-                end
-                2: begin
-                    seg1 = 7'b1000000;
-                    seg2 = 7'b1100011;
-                    seg3 = 7'b0000111;
-                    seg4 = selector7seg; /* print tactile */
-                    seg_dot = 4'b1111; 
-                end
-            endcase
+        case (sw)
+            default: begin
+                seg1 = min_decimal;
+                seg2 = min_unit;
+                seg3 = sec_decimal;
+                seg4 = sec_unit;
+                seg_dot = 4'b1011;
+            end
+            1: begin
+                seg1 = 7'b1111001;
+                seg2 = 7'b0101011;
+                seg3 = 7'b1111111;
+                seg4 = selector7seg; /* print tactile */
+                seg_dot = 4'b1111;    
+            end
+            2: begin
+                seg1 = 7'b1000000;
+                seg2 = 7'b1100011;
+                seg3 = 7'b0000111;
+                seg4 = selector7seg; /* print tactile */
+                seg_dot = 4'b1111; 
+            end
+        endcase
     end
     display(clk, seg_dot, seg1, seg2, seg3, seg4, seg, an, dp);
 endmodule
