@@ -54,6 +54,7 @@ module top_module(
     savetime(time_saver[4], timer, parking_time5);
     savetime(time_saver[5], timer, parking_time6);
     
+    /* Temp save timing */
     always @ (posedge selector) begin
         case (selector)
             default: time_saver = 6'b000000;
