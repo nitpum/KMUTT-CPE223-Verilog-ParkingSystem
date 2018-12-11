@@ -27,6 +27,8 @@ module top_module(
     output [3:0] an,
     input [3:0] JCC,
     output [3:0] JCR,
+    input [4:0] JB,
+    output [4:0] JA,
     output dp
     );
     wire clk_sec, checkout;
@@ -49,6 +51,52 @@ module top_module(
     timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
     bcdto7seg(selector, selector7seg);
     btn_decoder(clk, JCC, JCR, selector);
+<<<<<<< HEAD
+    savetime(save_time, timer, parking_time1);
+    
+    carstatus(clk, JB, JA);
+    
+    always @ (sw) begin
+        if (sw != 3) save_time <= 0;
+            case (sw)
+                default: begin
+                    seg1 = min_decimal;
+                    seg2 = min_unit;
+                    seg3 = sec_decimal;
+                    seg4 = sec_unit;
+                    seg_dot = 4'b1011;    
+                end
+                1: begin
+                    seg1 = 7'b1111001;
+                    seg2 = 7'b0101011;
+                    seg3 = 7'b1111111;
+                    seg4 = selector7seg; /* print tactile */
+                    seg_dot = 4'b1111;    
+                end
+                2: begin
+                    seg1 = 7'b1000000;
+                    seg2 = 7'b1100011;
+                    seg3 = 7'b0000111;
+                    seg4 = selector7seg; /* print tactile */
+                    seg_dot = 4'b1111; 
+                end
+                3: begin
+                    seg1 = 7'b111111;
+                    seg2 = min2;
+                    seg3 = sec1;
+                    seg4 = sec2;
+                    save_time <= 1;
+                    seg_dot = 4'b1111;
+                end
+                4: begin
+                    seg1 = min1;
+                    seg2 = min2;
+                    seg3 = sec1;
+                    seg4 = sec2;
+                    seg_dot = 4'b1011;
+                end
+            endcase
+=======
     
     savetime(time_saver[0], timer, parking_time1);
     savetime(time_saver[1], timer, parking_time2);
@@ -120,6 +168,7 @@ module top_module(
                 seg_dot = 4'b1111; 
             end
         endcase
+>>>>>>> 0330d898fc0d96aded23edf9702c677122b088fe
     end
     display(clk, seg_dot, seg1, seg2, seg3, seg4, seg, an, dp);
 endmodule
