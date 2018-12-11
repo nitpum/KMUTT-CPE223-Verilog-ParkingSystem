@@ -22,29 +22,30 @@
 
 module top_module(
     input clk,
-    input [4:0] sw,
-    input [3:0] JCC,
-    output [15:0] led,
-    output [3:0] JCR,
+    input [4:0] sw,    
     output [6:0] seg,
     output [3:0] an,
+    input [3:0] JCC,
+    output [3:0] JCR,
     output dp
     );
     wire clk_sec;
     reg [6:0] seg1, seg2, seg3, seg4;
     wire [6:0] timer1, timer2, timer3, timer4;
     wire [10:0] timer;
-    wire [6:0] seg_temp;
-    reg [3:0] dot;
-    wire [15:0] num;
+    reg [3:0] seg_dot;
     divide_sec(clk, clk_sec);
     time_counter(clk_sec, 0, timer);
     bcdto7seg(timer / 60 / 10, timer1);
     bcdto7seg(timer / 60 % 10, timer2);
     bcdto7seg(timer % 60 / 10, timer3);
     bcdto7seg(timer % 10, timer4);
-    decoder(JCC,clk,num,JCR);
-    bcdto7seg(num[3:0],seg_temp);
+    bcdto7seg(selector, selector7seg);
+    
+    wire [3:0] selector;
+    wire [6:0] selector7seg;
+    btn_decoder(clk, JCC, JCR, selector);
+    
     always @ (sw) begin
         case (sw)
             default: begin
@@ -58,15 +59,15 @@ module top_module(
                 seg1 = 7'b1111001;
                 seg2 = 7'b0101011;
                 seg3 = 7'b1111111;
-                seg4 = seg_temp;
-                dot = 4'b1111;    
+                seg4 = selector7seg; /* print tactile */
+                seg_dot = 4'b1111;    
             end
             2: begin
                 seg1 = 7'b1000000;
                 seg2 = 7'b1100011;
                 seg3 = 7'b0000111;
-                seg4 = seg_temp;
-                dot = 4'b1111; 
+                seg4 = selector7seg; /* print tactile */
+                seg_dot = 4'b1111; 
             end
         endcase
     end
