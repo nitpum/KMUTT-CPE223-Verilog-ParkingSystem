@@ -57,14 +57,14 @@ module top_module(
                     seg2 = 7'b0101011;
                     seg3 = 7'b1111111;
                     seg4 = prev;
-                    dot = 4'b1111;    
+                    seg_dot = 4'b1111;    
                 end
                 2: begin
                     seg1 = 7'b1000000;
                     seg2 = 7'b1100011;
                     seg3 = 7'b0000111;
                     seg4 = prev;
-                    dot = 4'b1111; 
+                    seg_dot = 4'b1111; 
                 end
             endcase
     end
