@@ -65,7 +65,6 @@ module top_module(
     carstatus(clk, JB, JA);
 
     always @ (sw) begin
-        if (sw != 3) save_time <= 0;
             case (sw)
                 default: begin
                     seg1 = min_decimal;
@@ -87,21 +86,6 @@ module top_module(
                     seg3 = 7'b0000111;
                     seg4 = selector7seg; /* print tactile */
                     seg_dot = 4'b1111; 
-                end
-                3: begin
-                    seg1 = 7'b111111;
-                    seg2 = min2;
-                    seg3 = sec1;
-                    seg4 = sec2;
-                    save_time <= 1;
-                    seg_dot = 4'b1111;
-                end
-                4: begin
-                    seg1 = min1;
-                    seg2 = min2;
-                    seg3 = sec1;
-                    seg4 = sec2;
-                    seg_dot = 4'b1011;
                 end
             endcase
     end
