@@ -29,7 +29,8 @@ module top_module(
     output [3:0] JCR,
     input [4:0] JB,
     output [4:0] JA,
-    output dp
+    output dp,
+    output [5:0] led
     );
     wire clk_sec;
     reg start_ct;
@@ -47,7 +48,7 @@ module top_module(
     wire [10:0] fee;
     wire [6:0] price1_seg, price2_seg, price3_seg;
     wire clkms;
-    wire slotavail;
+    wire slotavail;  
     divide_sec(clk, clk_sec);
     divider(clk, clkms);
     time_counter(clk_sec, 0, timer);
@@ -64,7 +65,6 @@ module top_module(
     btn_decoder(clk, JCC, JCR, selector, btn_press);
     
 //    price_calculator(checkout, checkout_time, timer, 5, checkout_price);
-    
     selectstate(clkms, slotavail, btn_press, state);
     checkslot(parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, selector, slotavail);
     checkin(~slotavail, selector, timer, time_saver, parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6);
