@@ -1,12 +1,3 @@
-module top_module(
-input [3:0] JCC,
-    input clk,
-    output [15:0] led,
-    output reg [3:0] JCR,
-    output reg [6:0] seg
-    );
-    endmodule
-=======
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
@@ -80,4 +71,3 @@ module top_module(
     end
     display(clk, dot, seg1, seg2, seg3, seg4, seg, an, dp);
 endmodule
->>>>>>> 48737695cbd5422eeca9f19c771411b08e05b466
