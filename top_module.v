@@ -31,12 +31,19 @@ module top_module(
     output dp
     );
     wire clk_sec;
-    reg [6:0] seg1, seg2, seg3, seg4;
-    wire [6:0] timer1, timer2, timer3, timer4;
+    reg [6:0] seg1;
+    reg [6:0] seg2;
+    reg [6:0] seg3;
+    reg [6:0] seg4;
+    wire [6:0] timer1;
+    wire [6:0] timer2;
+    wire [6:0] timer3;
+    wire [6:0] timer4;
     wire [10:0] timer;
     wire [6:0] seg_temp;
     reg [3:0] dot;
     wire [15:0] num;
+    reg [6:0] prev;
     divide_sec(clk, clk_sec);
     time_counter(clk_sec, 0, timer);
     bcdto7seg(timer / 60 / 10, timer1);
@@ -45,30 +52,34 @@ module top_module(
     bcdto7seg(timer % 10, timer4);
     decoder(JCC,clk,num,JCR);
     bcdto7seg(num[3:0],seg_temp);
-    always @ (sw) begin
-        case (sw)
-            default: begin
-                seg1 = timer1;
-                seg2 = timer2;
-                seg3 = timer3;
-                seg4 = timer4;
-                seg_dot = 4'b1011;    
-            end
-            1: begin
-                seg1 = 7'b1111001;
-                seg2 = 7'b0101011;
-                seg3 = 7'b1111111;
-                seg4 = seg_temp;
-                dot = 4'b1111;    
-            end
-            2: begin
-                seg1 = 7'b1000000;
-                seg2 = 7'b1100011;
-                seg3 = 7'b0000111;
-                seg4 = seg_temp;
-                dot = 4'b1111; 
-            end
-        endcase
+    always @(posedge clk) begin
+        if(num!=0)
+            prev=seg_temp;
     end
-    display(clk, seg_dot, seg1, seg2, seg3, seg4, seg, an, dp);
+    always @ (sw) begin
+            case (sw)
+                default: begin
+                    seg1 = timer1;
+                    seg2 = timer2;
+                    seg3 = timer3;
+                    seg4 = timer4;
+                    dot = 4'b1011;    
+                end
+                1: begin
+                    seg1 = 7'b1111001;
+                    seg2 = 7'b0101011;
+                    seg3 = 7'b1111111;
+                    seg4 = prev;
+                    dot = 4'b1111;    
+                end
+                2: begin
+                    seg1 = 7'b1000000;
+                    seg2 = 7'b1100011;
+                    seg3 = 7'b0000111;
+                    seg4 = prev;
+                    dot = 4'b1111; 
+                end
+            endcase
+    end
+    display(clk, dot, seg1, seg2, seg3, seg4, seg, an, dp);
 endmodule
