@@ -60,12 +60,27 @@ module top_module(
     
     price_calculator(checkout, checkout_time, timer, 5, checkout_price);
     
-    countdown(clk_sec, start_ct, 10, delay_state);
+    countdown(clk_sec, start_ct, 5, delay_state);
     
     carstatus(clk, JB, JA);
-
-    always @ (sw) begin
-            case (sw)
+    always @ (selector) begin
+        case (selector)
+            default: begin
+                state <= 0; 
+                end
+            1: 
+                begin
+                    if (state == 0)
+                        begin
+                            state <= 1;
+                            start_ct <= 1;
+                            start_ct <= 1;              
+                        end
+                end 
+        endcase
+    end
+    always @ (state) begin
+            case (state)
                 default: begin
                     seg1 = min_decimal;
                     seg2 = min_unit;
