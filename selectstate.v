@@ -4,16 +4,15 @@ module selectstate(
     input press, 
     output reg [2:0] state
 );
-    reg [10:0] counter;
+    reg [11:0] counter;
     initial counter = 0;
     
     always @(posedge ms) begin
-        if(press == 1) counter = 2000;
+        if(press == 1) counter = (isOut)?4000:2000;
         else if(counter > 0) begin
-            state = (isOut)?2:1;
+            state = (isOut)?(counter > 2000)?2:3:1;
             counter = counter - 1;
         end
-        else if(state == 2) state = 3;
         else state = 0;
     end
 endmodule
