@@ -1,5 +1,6 @@
 module selectstate(
     input ms,
+    input isOut,
     input press, 
     output reg [2:0] state
 );
@@ -7,11 +8,12 @@ module selectstate(
     initial counter = 0;
     
     always @(posedge ms) begin
-        if(press == 1) counter = 1000;
+        if(press == 1) counter = 2000;
         else if(counter > 0) begin
-            state = 1;
+            state = (isOut)?2:1;
             counter = counter - 1;
         end
+        else if(state == 2) state = 3;
         else state = 0;
     end
 endmodule

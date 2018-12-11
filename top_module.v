@@ -65,27 +65,13 @@ module top_module(
     
     price_calculator(checkout, checkout_time, timer, 5, checkout_price);
     
-//    countdown(clk_sec, start_ct, 5, delay_state);
     
-    selectstate(clkms, btn_press, state);
+    selectstate(clkms, slotavail, btn_press, state);
+    wire slotavail;
+    checkslot(parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, selector, slotavail);
+    
     
     carstatus(clk, JB, JA);
-//    always @ (selector) begin
-//        case (selector)
-//            default: begin
-//                state <= 0; 
-//                end
-//            1: 
-//                begin
-//                    if (state == 0)
-//                        begin
-//                            state <= 1;
-//                            start_ct <= 1;
-//                            start_ct <= 1;              
-//                        end
-//                end 
-//        endcase
-//    end
     always @ (state) begin
             case (state)
                 default: begin
