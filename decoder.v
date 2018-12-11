@@ -23,7 +23,8 @@ module btn_decoder(
     input clk,
     input [3:0] JCC,
     output [3:0] JCR,
-    output reg [3:0] value
+    output reg [3:0] value,
+    output reg press
     );
     wire slclk;
     wire [15:0] tactile_sw;
@@ -33,6 +34,8 @@ module btn_decoder(
     numpad(slclk, JCC, JCR, tactile_sw);
     
     always @(posedge clk) begin
+        if(tactile_sw > 0) press = 1;
+        else press = 0;
         case(tactile_sw)
             16'b0000_0000_0000_0001: value = 1;
             16'b0000_0000_0000_0010: value = 2;

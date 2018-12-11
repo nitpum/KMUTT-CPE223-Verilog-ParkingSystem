@@ -33,7 +33,7 @@ module top_module(
     );
     wire clk_sec, checkout;
     reg start_ct;
-    reg [2:0] state;
+    wire [2:0] state;
     reg [6:0] seg1, seg2, seg3, seg4;
     wire [6:0] min_decimal, min_unit, sec_decimal, sec_unit;
     reg [10:0] checkout_time;
@@ -45,12 +45,17 @@ module top_module(
     wire [6:0] selector7seg;
     wire [17:0] checkout_price;
     divide_sec(clk, clk_sec);
+    wire clkms;
+    divider(clk, clkms);
     time_counter(clk_sec, 0, timer);
 
     //timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
     timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
+    
+    wire btn_press;
     bcdto7seg(selector, selector7seg);
-    btn_decoder(clk, JCC, JCR, selector);
+    btn_decoder(clk, JCC, JCR, selector, btn_press);
+    
     savetime(time_saver[0], timer, parking_time1);
     savetime(time_saver[1], timer, parking_time2);
     savetime(time_saver[2], timer, parking_time3);
@@ -60,25 +65,27 @@ module top_module(
     
     price_calculator(checkout, checkout_time, timer, 5, checkout_price);
     
-    countdown(clk_sec, start_ct, 5, delay_state);
+//    countdown(clk_sec, start_ct, 5, delay_state);
+    
+    selectstate(clkms, btn_press, state);
     
     carstatus(clk, JB, JA);
-    always @ (selector) begin
-        case (selector)
-            default: begin
-                state <= 0; 
-                end
-            1: 
-                begin
-                    if (state == 0)
-                        begin
-                            state <= 1;
-                            start_ct <= 1;
-                            start_ct <= 1;              
-                        end
-                end 
-        endcase
-    end
+//    always @ (selector) begin
+//        case (selector)
+//            default: begin
+//                state <= 0; 
+//                end
+//            1: 
+//                begin
+//                    if (state == 0)
+//                        begin
+//                            state <= 1;
+//                            start_ct <= 1;
+//                            start_ct <= 1;              
+//                        end
+//                end 
+//        endcase
+//    end
     always @ (state) begin
             case (state)
                 default: begin
