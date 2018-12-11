@@ -51,11 +51,19 @@ module top_module(
     timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
     bcdto7seg(selector, selector7seg);
     btn_decoder(clk, JCC, JCR, selector);
-<<<<<<< HEAD
-    savetime(save_time, timer, parking_time1);
+    savetime(time_saver[0], timer, parking_time1);
+    savetime(time_saver[1], timer, parking_time2);
+    savetime(time_saver[2], timer, parking_time3);
+    savetime(time_saver[3], timer, parking_time4);
+    savetime(time_saver[4], timer, parking_time5);
+    savetime(time_saver[5], timer, parking_time6);
+    
+    price_calculator(checkout, checkout_time, timer, 5, checkout_price);
+    
+    countdown(clk_sec, start_ct, 10, delay_state);
     
     carstatus(clk, JB, JA);
-    
+
     always @ (sw) begin
         if (sw != 3) save_time <= 0;
             case (sw)
@@ -96,79 +104,6 @@ module top_module(
                     seg_dot = 4'b1011;
                 end
             endcase
-=======
-    
-    savetime(time_saver[0], timer, parking_time1);
-    savetime(time_saver[1], timer, parking_time2);
-    savetime(time_saver[2], timer, parking_time3);
-    savetime(time_saver[3], timer, parking_time4);
-    savetime(time_saver[4], timer, parking_time5);
-    savetime(time_saver[5], timer, parking_time6);
-    
-    price_calculator(checkout, checkout_time, timer, 5, checkout_price);
-    
-    countdown(clk_sec, start_ct, 10, delay_state);
-    
-    always @ (posedge delay_state) 
-        begin
-            if (delay_state == 0) begin
-                start_ct <= 0;
-                state <= 0;
-            end
-        end
-    
-    always @ (state) begin
-        case (state)
-            default: begin 
-                    time_saver = 6'b000000;
-                end
-            1: begin
-//                    if (slot[0] == 0) 
-//                        begin
-//                            state <= 1;
-//                            time_saver = 6'b000001;
-//                            start_ct <= 1;
-//                        end
-//                    else
-//                        begin
-//                            state <= 2;
-//                            checkout_time <= parking_time1;
-//                            start_ct <= 1;
-//                        end
-                end
-            2: time_saver = 6'b000010;
-            3: time_saver = 6'b000100;
-            4: time_saver = 6'b001000;
-            5: time_saver = 6'b010000;
-            6: time_saver = 6'b100000;
-        endcase
-    end
-    
-    always @ (sw) begin
-        case (sw)
-            default: begin
-                seg1 = min_decimal;
-                seg2 = min_unit;
-                seg3 = sec_decimal;
-                seg4 = sec_unit;
-                seg_dot = 4'b1011;
-            end
-            1: begin
-                seg1 = 7'b1111001;
-                seg2 = 7'b0101011;
-                seg3 = 7'b1111111;
-                seg4 = selector7seg; /* print tactile */
-                seg_dot = 4'b1111;    
-            end
-            2: begin
-                seg1 = 7'b1000000;
-                seg2 = 7'b1100011;
-                seg3 = 7'b0000111;
-                seg4 = selector7seg; /* print tactile */
-                seg_dot = 4'b1111; 
-            end
-        endcase
->>>>>>> 0330d898fc0d96aded23edf9702c677122b088fe
     end
     display(clk, seg_dot, seg1, seg2, seg3, seg4, seg, an, dp);
 endmodule
