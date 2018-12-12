@@ -29,8 +29,7 @@ module top_module(
     output [3:0] JCR,
     input [4:0] JB,
     output [4:0] JA,
-    output dp,
-    output [5:0] led
+    output dp
     );
     wire clk_sec;
     reg start_ct;
@@ -48,27 +47,27 @@ module top_module(
     wire [10:0] fee;
     wire [6:0] price1_seg, price2_seg, price3_seg;
     wire clkms;
-    wire slotavail;  
+    wire slotavail;
     divide_sec(clk, clk_sec);
     divider(clk, clkms);
     time_counter(clk_sec, 0, timer);
 
-    bcdto7seg((fee / 100) % 10, price1_seg);
-    bcdto7seg((fee / 10) % 10, price2_seg);
+    bcdto7seg(fee / 100 % 10, price1_seg);
+    bcdto7seg(fee / 10 % 10, price2_seg);
     bcdto7seg(fee % 10, price3_seg);
 
+    //timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
     timeto7seg(timer, min_decimal, min_unit, sec_decimal, sec_unit);
-    assign led = { parking_time6 > 0, parking_time5 > 0, parking_time4 > 0, parking_time3 > 0, parking_time2 > 0, parking_time1 > 0 };
+    
     wire btn_press;
     bcdto7seg(selector, selector7seg);
     btn_decoder(clk, JCC, JCR, state==0, selector, btn_press);
+//    price_calculator(checkout, checkout_time, timer, 5, checkout_price);
     wire activateSaveSlot;
     selectstate(clkms, slotavail, btn_press, state, activateSaveSlot);
-    checkslot(parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, 
-                selector, slotavail);
-    checkinout(~slotavail, activateSaveSlot, selector, timer, 
-                parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, 
-                fee);
+    checkslot(parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, selector, slotavail);
+    checkin(~slotavail, activateSaveSlot, selector, timer, time_saver, parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, fee);
+//    checkout(slotavail, activateSaveSlot, selector, timer, parking_time1, parking_time2, parking_time3, parking_time4, parking_time5, parking_time6, fee);
     carstatus(clk, JB, JA);
     always @ (state) begin
             case (state)
