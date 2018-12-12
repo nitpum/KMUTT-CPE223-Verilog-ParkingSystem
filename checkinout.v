@@ -22,7 +22,7 @@
 
 
 module checkinout(
-    input free,
+    input avail,
     input firstInteract,
     input active,
     input [3:0] selector,
@@ -43,8 +43,19 @@ module checkinout(
         use_time = 0;
     end
     always @ (posedge firstInteract) begin
-        firstTime = timer;
-        if (!free)
+        firstTime <= timer; /* Save time on press btn */
+        if (avail)
+            begin
+                case (selector)
+                    1: p1 <= timer;
+                    2: p2 <= timer;
+                    3: p3 <= timer;
+                    4: p4 <= timer;
+                    5: p5 <= timer;
+                    6: p6 <= timer;
+                endcase
+            end
+        else
             begin
                case (selector)
                     1: begin
@@ -72,24 +83,8 @@ module checkinout(
                         p6 = 0;
                     end
                endcase
+               fee = use_time;
             end
-        else 
-            begin
-                case (selector)
-                    1: p1 = firstTime;
-                    2: p2 = firstTime;
-                    3: p3 = firstTime;
-                    4: p4 = firstTime;
-                    5: p5 = firstTime;
-                    6: p6 = firstTime;
-                endcase
-            end
-         
-            
-        fee = use_time;
     end
-//    always @ (posedge active) begin
-        
-//    end 
-//    assign fee = use_time;
+
 endmodule
