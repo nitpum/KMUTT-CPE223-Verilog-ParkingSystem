@@ -43,16 +43,16 @@ module checkinout(
         use_time = 0;
     end
     always @ (posedge firstInteract) begin
-        firstTime <= timer; /* Save time on press btn */
+        firstTime = timer; /* Save time on press btn */
         if (avail)
             begin
                 case (selector)
-                    1: p1 <= timer;
-                    2: p2 <= timer;
-                    3: p3 <= timer;
-                    4: p4 <= timer;
-                    5: p5 <= timer;
-                    6: p6 <= timer;
+                    1: p1 = timer;
+                    2: p2 = timer;
+                    3: p3 = timer;
+                    4: p4 = timer;
+                    5: p5 = timer;
+                    6: p6 = timer;
                 endcase
             end
         else
